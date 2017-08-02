@@ -36,14 +36,21 @@ public class MongoDBConnection implements DBConnection {
 
 	private MongoDBConnection() {
 		// Connects to local mongodb server.
-		mongoClient = new MongoClient();
-		db = mongoClient.getDatabase(MongoDBUtil.DB_NAME);
+		try {
+			mongoClient = new MongoClient();
+			db = mongoClient.getDatabase(MongoDBUtil.DB_NAME);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void close() {
 		if (mongoClient != null) {
-			mongoClient.close();
+			try {
+				mongoClient.close();
+			} catch (Exception e) {
+			}
 		}
 	}
 
@@ -56,8 +63,7 @@ public class MongoDBConnection implements DBConnection {
 	@Override
 	public void unsetFavoriteItems(String userId, List<String> itemIds) {
 		db.getCollection("users").updateOne(new Document("user_id", userId),
-				new Document("$pull", new Document("favorite", new Document("$each", itemIds))));
-
+				new Document("$pullAll", new Document("favorite", itemIds)));
 	}
 
 	@Override

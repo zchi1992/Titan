@@ -88,7 +88,7 @@ public class ItemHistory extends HttpServlet {
 		try {
 			JSONObject input = RpcHelper.readJsonObject(request);
 			String userId = input.getString("user_id");
-			JSONArray array = (JSONArray) input.get("item_id");
+			JSONArray array = (JSONArray) input.get("favorite");
 
 			List<String> itemIds = new ArrayList<>();
 			for (int i = 0; i < array.length(); i++) {
